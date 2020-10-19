@@ -1,0 +1,11 @@
+---
+- hosts: users
+  remote_user: ubuntu
+
+  tasks:
+  - name: Create user
+    user:
+      name: "{{ user_name }}"
+      state: absent
+    become: yes
+
