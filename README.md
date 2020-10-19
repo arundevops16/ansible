@@ -7,5 +7,6 @@
 * pub key of conrtol machine should be added in user authorized_keys of remote machine. 
 
 ### Commands:
-ansible-playbook -i inventory-hosts -e user_name=arun usermanagement.yml
-ansible-playbook -i inventory-hosts -e user_name=arun deleteuser.yml
+$ ansible-playbook -i inventory-hosts -e user_name=arun usermanagement.yml
+
+$ ansible-playbook -i inventory-hosts -e user_name=arun deleteuser.yml
