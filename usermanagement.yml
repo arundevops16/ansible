@@ -24,14 +24,27 @@
     shell: mkpasswd --method=SHA-512 {{ user_password.stdout }}
     register: encrypted_user_password
 
+  - name: Make sure we have a 'devops' group
+    group:
+      name=devops
+      state=present
+
   - name: Create user account
     user: name={{ user_name }}
           password={{ encrypted_user_password.stdout }}
+          groups=devops
           state=present
           append=yes
           shell="/bin/bash"
           update_password=always
     register: user_created
+
+  - name: Allow 'devops' group to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%devops'
+      line: '%devops ALL=(ALL) NOPASSWD: ALL'
 
   - name: Force user to change password
     shell: chage -d 0 {{ user_name }}
@@ -47,4 +60,5 @@
     register: ansible_ssh_host_values
 
   - name: backup password
-    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /tmp/output
+    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /tmp/{{ user_name }}
+#    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" > /tmp/output
