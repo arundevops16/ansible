@@ -1,0 +1,14 @@
+---
+- hosts: "{{ host_name }}"
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name:  Install filebeat from deb package by downloading from official site
+    apt:
+      deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.9.3-amd64.deb
+ 
+  - name: Restart service filebeat
+    service:
+      name: filebeat
+      enabled: yes
+      state: restarted

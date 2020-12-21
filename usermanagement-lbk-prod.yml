@@ -1,0 +1,12 @@
+---
+- hosts: "{{ host_name }}"
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name: register user if its present on remote machine
+    shell: /bin/cat /etc/passwd|grep {{ user_name }} | /usr/bin/wc -l | tr -d ''
+    register: existing_user
+  - name:  run the role if user is not present
+    include_role: 
+      name: /home/ubuntu/ansible/roles/usermanagement
+    when: existing_user.stdout != '1'

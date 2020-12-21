@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host_name }}"
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name:  run the role to configure filebeat
+    include_role:
+      name: /home/ubuntu/ansible/roles/filebeat
+
+# ansible-playbook -i inventory-labaiik-prod -e host_name=users filebeat-site.yml

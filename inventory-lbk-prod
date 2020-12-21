@@ -1,0 +1,7 @@
+user1      ansible_host=18.203.251.243 ansible_port=22 ansible_user=ubuntu ansible_connection=ssh
+user2      ansible_host=3.250.221.18 ansible_port=22 ansible_user=ubuntu ansible_connection=ssh
+
+[users]
+user1
+user2
+
