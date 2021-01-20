@@ -1,0 +1,12 @@
+---
+- hosts: elk-stack
+  remote_user: devops
+  become: yes
+  vars:
+    node1: 10.10.10.1 # node1 IP
+    node2: 10.10.10.2 # node2 IP
+    node3: 10.10.10.3 # node3 IP
+    node_proxy: 10.10.10.4 # proxy node IP
+  roles:
+    - /home/devops/ansible_scripts/elk-stack
+#    - /home/devops/ansible_scripts/nginx
