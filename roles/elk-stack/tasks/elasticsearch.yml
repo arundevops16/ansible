@@ -1,0 +1,15 @@
+---
+
+#  - name:  Install elasticsearch from deb package by downloading from official site
+#    apt:
+#      deb: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.1-amd64.deb 
+  - name: Copy elasticsearch configuration file
+    template:
+      src: elasticsearch.j2
+      dest: /etc/elasticsearch/elasticsearch.yml
+  - name: Restart service elasticsearch
+    service:
+      name: elasticsearch
+      enabled: yes
+      state: restarted
+

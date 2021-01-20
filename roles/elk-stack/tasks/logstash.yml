@@ -1,0 +1,11 @@
+---
+
+#  - name:  Install logstash from deb package by downloading from official site
+#    apt:
+#      deb: https://artifacts.elastic.co/downloads/logstash/logstash-7.10.1-amd64.deb 
+  - name: Restart service logstash
+    service:
+      name: logstash
+      enabled: yes
+      state: restarted
+

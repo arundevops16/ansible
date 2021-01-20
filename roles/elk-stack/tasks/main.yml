@@ -1,0 +1,17 @@
+---
+# tasks file for elk-stack
+#- include_tasks: "{{ package }}".yml
+- include_tasks: elasticsearch.yml
+  when: package == "elasticsearch"
+
+- include_tasks: logstash.yml
+  when: package == "logstash"
+
+- include_tasks: kibana.yml
+  when: package == "kibana"
+
+- include_tasks: nginx.yml
+  when: package == "nginx"
+
+- include_tasks: elk_proxy.yml
+  when: package == "elk_proxy"

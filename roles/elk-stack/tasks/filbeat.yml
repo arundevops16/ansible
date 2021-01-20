@@ -1,0 +1,11 @@
+---
+
+  - name:  Install filebeat from deb package by downloading from official site
+    apt:
+      deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.10.1-amd64.deb
+  - name: Restart service filebeat
+    service:
+      name: filebeat
+      enabled: yes
+      state: restarted
+

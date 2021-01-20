@@ -1,0 +1,26 @@
+---
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=86400
+  changed_when: false
+
+- name: Ensure nginx is installed.
+  apt:
+    name: "nginx"
+    state: present
+  notify: Start nginx  
+- name: Copy Nginx configuration file
+  template:
+    src: nginx.j2
+    dest: /etc/nginx/sites-available/nginx.conf
+- name: Create symbolic link 
+  file:
+    src: /etc/nginx/sites-available/nginx.conf
+    dest: /etc/nginx/sites-enabled/nginx.conf
+    state: link
+
+#- name: Restart service nginx
+#  service:
+#    name: nginx
+#    enabled: yes
+#    state: restarted
+
