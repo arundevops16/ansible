@@ -1,6 +1,39 @@
-user1      ansible_host=18.203.251.243 ansible_port=22 ansible_user=ubuntu ansible_connection=ssh
-user2      ansible_host=3.250.221.18 ansible_port=22 ansible_user=ubuntu ansible_connection=ssh
+validator_node_00 ansible_host=10.0.0.163 ansible_user=ubuntu a_pkg=validator
+validator_node_01 ansible_host=10.0.0.187 ansible_user=ubuntu a_pkg=validator
+validator_node_02 ansible_host=10.0.0.190 ansible_user=ubuntu a_pkg=validator
+validator_node_03 ansible_host=10.0.0.182 ansible_user=ubuntu a_pkg=validator
+validator_node_04 ansible_host=10.0.0.166 ansible_user=ubuntu a_pkg=validator
+validator_node_05 ansible_host=10.0.0.245 ansible_user=ubuntu a_pkg=validator
+validator_node_06 ansible_host=10.0.0.219 ansible_user=ubuntu a_pkg=validator
+validator_node_07 ansible_host=10.0.0.227 ansible_user=ubuntu a_pkg=validator
+validator_node_08 ansible_host=10.0.0.197 ansible_user=ubuntu a_pkg=validator
+validator_node_09 ansible_host=10.0.0.203 ansible_user=ubuntu a_pkg=validator
 
-[users]
-user1
-user2
+rpc_node_internal_01 ansible_host=10.0.0.156 ansible_user=ubuntu a_pkg=rpc
+rpc_node_internal_02 ansible_host=10.0.0.242 ansible_user=ubuntu a_pkg=rpc
+
+explorer_node_01 ansible_host=10.0.0.232 ansible_user=ubuntu a_pkg=explorer
+
+[validator]
+validator_node_00
+validator_node_01
+validator_node_02
+validator_node_03
+validator_node_04
+validator_node_05
+validator_node_06
+validator_node_07
+validator_node_08
+validator_node_09
+
+[rpc]
+rpc_node_internal_01
+rpc_node_internal_02
+
+[explorer]
+explorer_node_01
+
+[infra:children]
+validator
+rpc
+explorer

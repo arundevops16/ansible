@@ -1,16 +1,15 @@
 ---
-- hosts: users
+- hosts: "{{ host_name }}"
   remote_user: ubuntu
   become: yes
-  tasks:
-
+  pre_tasks:
   - name: Update repositories cache and install "makepasswd" package
     apt:
       name: makepasswd
       state: present
       update_cache: yes
 
-  - name: Update repositories cache and install "makepasswd" package
+  - name: Update repositories cache and install whois package
     apt:
       name: whois
       state: present
@@ -22,43 +21,12 @@
 
   - name: Generate encrypted password
     shell: mkpasswd --method=SHA-512 {{ user_password.stdout }}
-    register: encrypted_user_password
-
-  - name: Make sure we have a 'devops' group
-    group:
-      name=devops
-      state=present
-
-  - name: Create user account
-    user: name={{ user_name }}
-          password={{ encrypted_user_password.stdout }}
-          groups=devops
-          state=present
-          append=yes
-          shell="/bin/bash"
-          update_password=always
-    register: user_created
-
-  - name: Allow 'devops' group to have passwordless sudo
-    lineinfile:
-      dest: /etc/sudoers
-      state: present
-      regexp: '^%devops'
-      line: '%devops ALL=(ALL) NOPASSWD: ALL'
-
-  - name: Force user to change password
-    shell: chage -d 0 {{ user_name }}
-    when: user_created.changed
-
-    #  - name: User created
-    #    debug: msg="Password for {{ inventory_hostname }} is {{ user_password.stdout }}"
-    #    when: user_created.changed
-
-  - name: User created
-    debug: msg="Password for {{ ansible_ssh_host }} is {{ user_password.stdout }}"
-    when: user_created.changed
-    register: ansible_ssh_host_values
-
-  - name: backup password
-    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /tmp/{{ user_name }}
-#    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" > /tmp/output
+    register: encrypted_user_password  
+  tasks:
+  - name: register user if its present on remote machine
+    shell: /bin/cat /etc/passwd|grep {{ user_name }} | /usr/bin/wc -l | tr -d ''
+    register: existing_user
+  - name:  run the role if user is not present
+    include_role: 
+      name: usermanagement
+    when: existing_user.stdout != '1'
