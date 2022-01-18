@@ -29,9 +29,9 @@
     register: user_created
 
 
-  - name: Force user to change password
-    shell: chage -d 0 {{ user_name }}
-    when: user_created.changed
+  # - name: Force user to change password
+  #   shell: chage -d 0 {{ user_name }}
+  #   when: user_created.changed
 
     #  - name: User created
     #    debug: msg="Password for {{ inventory_hostname }} is {{ user_password.stdout }}"

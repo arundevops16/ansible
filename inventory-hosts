@@ -1,3 +1,5 @@
+jump_server_01 ansible_host=10.0.0.62 ansible_user=ubuntu a_pkg=jump
+
 validator_node_00 ansible_host=10.0.0.163 ansible_user=ubuntu a_pkg=validator
 validator_node_01 ansible_host=10.0.0.187 ansible_user=ubuntu a_pkg=validator
 validator_node_02 ansible_host=10.0.0.190 ansible_user=ubuntu a_pkg=validator
@@ -13,6 +15,9 @@ rpc_node_internal_01 ansible_host=10.0.0.156 ansible_user=ubuntu a_pkg=rpc
 rpc_node_internal_02 ansible_host=10.0.0.242 ansible_user=ubuntu a_pkg=rpc
 
 explorer_node_01 ansible_host=10.0.0.232 ansible_user=ubuntu a_pkg=explorer
+
+[jump]
+jump_server_01
 
 [validator]
 validator_node_00
@@ -37,3 +42,4 @@ explorer_node_01
 validator
 rpc
 explorer
+jump
