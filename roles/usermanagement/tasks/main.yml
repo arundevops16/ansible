@@ -27,7 +27,12 @@
           shell="/bin/bash"
           update_password=always
     register: user_created
-
+  - name: permissions
+    file: path=/home/devops
+          state=directory
+          owner=devops
+          group=devops
+          recurse=yes
 
   # - name: Force user to change password
   #   shell: chage -d 0 {{ user_name }}

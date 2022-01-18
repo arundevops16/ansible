@@ -1,11 +1,12 @@
 ---
-- hosts: users
+- hosts: "{{ host_name }}"
   remote_user: ubuntu
 
   tasks:
-  - name: Create user
+  - name: Delete User
     user:
       name: "{{ user_name }}"
       state: absent
+      remove: yes
     become: yes
 
