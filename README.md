@@ -8,6 +8,6 @@
 * Update IP's in host file (inventory-hosts)
 ### Commands:
 
-`ansible-playbook -i inventory-hosts -e user_name=arun usermanagement.yml`
+`ansible-playbook -i inventory-hosts -e user_name=devops -e group_name=non-sudo -e host_name=infra usermanagement.yml `
 
 `ansible-playbook -i inventory-hosts -e user_name=arun deleteuser.yml`
