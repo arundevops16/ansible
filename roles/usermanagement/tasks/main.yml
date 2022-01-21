@@ -1,31 +1,13 @@
 ---
-  # - name: Update repositories cache and install "makepasswd" package
-  #   apt:
-  #     name: makepasswd
-  #     state: present
-  #     update_cache: yes
-
-  # - name: Update repositories cache and install whois package
-  #   apt:
-  #     name: whois
-  #     state: present
-  #     update_cache: yes
-
-  # - name: Generate password for new user
-  #   shell: makepasswd --chars=20
-  #   register: user_password
-
-  # - name: Generate encrypted password
-  #   shell: mkpasswd --method=SHA-512 {{ user_password.stdout }}
-  #   register: encrypted_user_password
-
   - name: Create user account
     user: name={{ user_name }}
           password={{ encrypted_user_password.stdout }}
           state=present
+          groups=sudo
           append=yes
           shell="/bin/bash"
           update_password=always
+
     register: user_created
   - name: permissions
     file: path=/home/devops
@@ -34,13 +16,9 @@
           group=devops
           recurse=yes
 
-  # - name: Force user to change password
-  #   shell: chage -d 0 {{ user_name }}
-  #   when: user_created.changed
-
-    #  - name: User created
-    #    debug: msg="Password for {{ inventory_hostname }} is {{ user_password.stdout }}"
-    #    when: user_created.changed
+  - name: Force user to change password
+    shell: chage -d 0 {{ user_name }}
+    when: user_created.changed
 
   - name: User created
     debug: msg="Password for {{ ansible_ssh_host }} is {{ user_password.stdout }}"
