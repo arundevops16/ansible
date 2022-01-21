@@ -7,13 +7,21 @@
           append=yes
           shell="/bin/bash"
           update_password=always
-
+    when: group_name == "sudo"
+  - name: Create user account
+    user: name={{ user_name }}
+          password={{ encrypted_user_password.stdout }}
+          state=present
+          append=yes
+          shell="/bin/bash"
+          update_password=always
+    when: group_name == "non-sudo"
     register: user_created
   - name: permissions
-    file: path=/home/devops
+    file: path=/home/{{ user_name }}
           state=directory
-          owner=devops
-          group=devops
+          owner={{ user_name }}
+          group={{ user_name }}
           recurse=yes
 
   - name: Force user to change password
@@ -27,3 +35,33 @@
 
   - name: backup password
     local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /tmp/{{ user_name }}
+
+  # - name: add keys to ubuntu authorised files
+  #   copy:
+  #     src: /home/ubuntu/ansible-scripts/authorized_keys 
+  #     dest: /home/ubuntu/.ssh/ubuntu_authorized_keys
+  #     owner: ubuntu
+  #     group: ubuntu
+  #     mode: 0600
+  #   register: ubuntu_existing_user
+  - name: Ansible check directory.
+    stat:
+      path: /home/{{ user_name }}/.ssh
+    register: {{ user_name }}_ssh
+  - name: "Create .ssh directory if not exists"
+    file:
+      path: /home/{{ user_name }}/.ssh
+      state: directory
+      mode: 0755
+      group: {{ user_name }}
+      owner: {{ user_name }}
+      recurse: yes
+    when: {{ user_name }}_ssh.stat.exists == false
+  - name: add keys to username authorised files
+    copy:
+      src: {{ user_name }}_authorized_keys
+      dest: /home/{{ user_name }}/.ssh/authorized_keys
+      owner: {{ user_name }}
+      group: {{ user_name }}
+      mode: 0600
+    register: {{ user_name }}_existing_user
