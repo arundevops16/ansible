@@ -53,7 +53,7 @@
     register: ssh
 
   - name: Create .ssh directory if not exists
-    file: /home/{{ user_name }}/.ssh
+    file: path=/home/{{ user_name }}/.ssh
           state=directory
           mode=0755
           owner={{ user_name }}
