@@ -36,7 +36,7 @@
     register: ansible_ssh_host_values
 
   - name: backup password
-    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /home/{{ remote_user }}/{{ user_name }}.txt
+    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /home/{{ user_name }}.txt
 
   # - name: add keys to ubuntu authorised files
   #   copy:
