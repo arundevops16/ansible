@@ -56,16 +56,15 @@
     file: /home/{{ user_name }}/.ssh
           state=directory
           mode=0755
-          owner="{{ user_name }}"
-          group="{{ user_name }}"
+          owner={{ user_name }}
+          group={{ user_name }}
           recurse=yes
     when: ssh-dir.stat.exists == false
-   
+
   - name: add keys to username authorised files
-    copy:
-      src: "{{ user_name }}_authorized_keys"
-      dest: /home/{{ user_name }}/.ssh/authorized_keys
-      owner: {{ user_name }}
-      group: {{ user_name }}
-      mode: 0600
+    copy: src={{ user_name }}_authorized_keys
+          dest=/home/{{ user_name }}/.ssh/authorized_keys
+          mode=0600
+          owner={{ user_name }}
+          group={{ user_name }}
     register: keys_added
