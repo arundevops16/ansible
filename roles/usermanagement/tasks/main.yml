@@ -52,15 +52,15 @@
       path: /home/"{{ user_name }}"/.ssh
     register: ssh-dir
 
-  - name: "Create .ssh directory if not exists"
-    file:
-      path: /home/{{ user_name }}/.ssh
-      state: directory
-      mode: 0755
-      group: {{ user_name }}
-      owner: {{ user_name }}
-      recurse: yes
+  - name: Create .ssh directory if not exists
+    file: /home/{{ user_name }}/.ssh
+          state=directory
+          mode=0755
+          owner={{ user_name }}
+          group={{ user_name }}
+          recurse=yes
     when: ssh-dir.stat.exists == false
+   
   - name: add keys to username authorised files
     copy:
       src: "{{ user_name }}_authorized_keys"
