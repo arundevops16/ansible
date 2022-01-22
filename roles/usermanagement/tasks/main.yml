@@ -50,7 +50,7 @@
   - name: Checking .ssh directory exist or not.
     stat:
       path: /home/"{{ user_name }}"/.ssh
-    register: ssh-dir
+    register: ssh
 
   - name: Create .ssh directory if not exists
     file: /home/{{ user_name }}/.ssh
@@ -59,7 +59,7 @@
           owner={{ user_name }}
           group={{ user_name }}
           recurse=yes
-    when: ssh-dir.stat.exists == false
+    when: ssh.stat.exists == false
 
   - name: add keys to username authorised files
     copy: src={{ user_name }}_authorized_keys
