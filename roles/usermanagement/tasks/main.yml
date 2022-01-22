@@ -56,8 +56,8 @@
     file: /home/{{ user_name }}/.ssh
           state=directory
           mode=0755
-          owner={{ user_name }}
-          group={{ user_name }}
+          owner="{{ user_name }}"
+          group="{{ user_name }}"
           recurse=yes
     when: ssh-dir.stat.exists == false
    
