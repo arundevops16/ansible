@@ -1,5 +1,5 @@
 ---
-  - name: Create user account
+  - name: Create user account and add to sudo group
     user: name={{ user_name }}
           password={{ encrypted_user_password.stdout }}
           state=present
@@ -8,7 +8,8 @@
           shell="/bin/bash"
           update_password=always
     when: group_name == "sudo"
-  - name: Create user account
+ 
+  - name: Create user account without sudo access
     user: name={{ user_name }}
           password={{ encrypted_user_password.stdout }}
           state=present
@@ -17,7 +18,8 @@
           update_password=always
     when: group_name == "non-sudo"
     register: user_created
-  - name: permissions
+
+  - name: Provide owner permissions to user home directory
     file: path=/home/{{ user_name }}
           state=directory
           owner={{ user_name }}
@@ -28,13 +30,13 @@
     shell: chage -d 0 {{ user_name }}
     when: user_created.changed
 
-  - name: User created
+  - name: List username and default password
     debug: msg="Password for {{ ansible_ssh_host }} is {{ user_password.stdout }}"
     when: user_created.changed
     register: ansible_ssh_host_values
 
   - name: backup password
-    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> /tmp/{{ user_name }}
+    local_action: shell echo "{{ user_name }}  {{ ansible_ssh_host_values }} {{ user_password.stdout }}" >> ~/{{ user_name }}.txt
 
   # - name: add keys to ubuntu authorised files
   #   copy:
@@ -44,10 +46,12 @@
   #     group: ubuntu
   #     mode: 0600
   #   register: ubuntu_existing_user
-  - name: Ansible check directory.
+
+  - name: Checking .ssh directory exist or not.
     stat:
-      path: /home/{{ user_name }}/.ssh
-    register: {{ user_name }}_ssh
+      path: /home/"{{ user_name }}"/.ssh
+    register: ssh-dir
+
   - name: "Create .ssh directory if not exists"
     file:
       path: /home/{{ user_name }}/.ssh
@@ -56,12 +60,12 @@
       group: {{ user_name }}
       owner: {{ user_name }}
       recurse: yes
-    when: {{ user_name }}_ssh.stat.exists == false
+    when: ssh-dir.stat.exists == false
   - name: add keys to username authorised files
     copy:
-      src: {{ user_name }}_authorized_keys
+      src: "{{ user_name }}_authorized_keys"
       dest: /home/{{ user_name }}/.ssh/authorized_keys
       owner: {{ user_name }}
       group: {{ user_name }}
       mode: 0600
-    register: {{ user_name }}_existing_user
+    register: keys_added
